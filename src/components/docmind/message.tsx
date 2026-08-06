@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ChevronDown, Quote } from "lucide-react";
@@ -12,6 +12,13 @@ export type ChatMessage = {
   animate?: boolean;
 };
 
+/**
+ * Progressive reveal for fresh answers. Markdown re-parsing is costly, so we
+ * reveal in a fixed number of larger steps instead of character by character.
+ */
+const REVEAL_STEPS = 24;
+const REVEAL_INTERVAL_MS = 70;
+
 function useTypewriter(text: string, enabled: boolean) {
   const [shown, setShown] = useState(enabled ? "" : text);
 
@@ -20,18 +27,19 @@ function useTypewriter(text: string, enabled: boolean) {
       setShown(text);
       return;
     }
+    const step = Math.ceil(text.length / REVEAL_STEPS);
     let i = 0;
-    const step = Math.max(3, Math.ceil(text.length / 90));
     const timer = setInterval(() => {
       i += step;
       setShown(text.slice(0, i));
       if (i >= text.length) clearInterval(timer);
-    }, 18);
+    }, REVEAL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [text, enabled]);
 
   return shown;
 }
+
 
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
