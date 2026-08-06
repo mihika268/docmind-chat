@@ -14,13 +14,127 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chunks: {
+        Row: {
+          chunk_index: number
+          content: string
+          created_at: string
+          document_id: string
+          embedding: string
+          id: string
+          page: number
+          session_id: string
+        }
+        Insert: {
+          chunk_index?: number
+          content: string
+          created_at?: string
+          document_id: string
+          embedding: string
+          id?: string
+          page?: number
+          session_id: string
+        }
+        Update: {
+          chunk_index?: number
+          content?: string
+          created_at?: string
+          document_id?: string
+          embedding?: string
+          id?: string
+          page?: number
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chunks_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          chunk_count: number
+          created_at: string
+          id: string
+          name: string
+          page_count: number
+          session_id: string
+          size_bytes: number
+          status: string
+        }
+        Insert: {
+          chunk_count?: number
+          created_at?: string
+          id?: string
+          name: string
+          page_count?: number
+          session_id: string
+          size_bytes?: number
+          status?: string
+        }
+        Update: {
+          chunk_count?: number
+          created_at?: string
+          id?: string
+          name?: string
+          page_count?: number
+          session_id?: string
+          size_bytes?: number
+          status?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+          sources: Json
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          session_id: string
+          sources?: Json
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_id?: string
+          sources?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      match_chunks: {
+        Args: {
+          match_count?: number
+          p_document_ids: string[]
+          p_session_id: string
+          query_embedding: string
+        }
+        Returns: {
+          content: string
+          document_id: string
+          id: string
+          page: number
+          similarity: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
