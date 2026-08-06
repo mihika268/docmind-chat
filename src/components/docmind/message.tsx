@@ -12,10 +12,8 @@ export type ChatMessage = {
   animate?: boolean;
 };
 
-/** Progressive reveal so freshly generated answers "type" themselves in. */
 function useTypewriter(text: string, enabled: boolean) {
   const [shown, setShown] = useState(enabled ? "" : text);
-  const frame = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!enabled) {
@@ -23,19 +21,18 @@ function useTypewriter(text: string, enabled: boolean) {
       return;
     }
     let i = 0;
-    const tick = () => {
-      i = Math.min(text.length, i + Math.max(2, Math.round(text.length / 220)));
+    const step = Math.max(3, Math.ceil(text.length / 90));
+    const timer = setInterval(() => {
+      i += step;
       setShown(text.slice(0, i));
-      if (i < text.length) frame.current = setTimeout(tick, 16);
-    };
-    tick();
-    return () => {
-      if (frame.current) clearTimeout(frame.current);
-    };
+      if (i >= text.length) clearInterval(timer);
+    }, 18);
+    return () => clearInterval(timer);
   }, [text, enabled]);
 
   return shown;
 }
+
 
 export function MessageBubble({ message }: { message: ChatMessage }) {
   const [showSources, setShowSources] = useState(false);
