@@ -44,7 +44,7 @@ export async function extractPdfText(
     page.cleanup();
   }
 
-  await doc.destroy();
+  doc.cleanup();
   return pages;
 }
 
