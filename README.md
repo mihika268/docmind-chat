@@ -32,13 +32,15 @@ VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 
 ```bash
 npm run dev
+
 ```
 
-Open the application at:
+## Live Demo
 
-[Open DocMind AI](https://docmind-chat-dusky.vercel.app/workspace)
+[Open DocMind AI](https://docmind-chat-dusky.vercel.app/)
 
-If port `3000` is already in use, use the `Local` URL shown in the terminal.
+[Launch Workspace](https://docmind-chat-dusky.vercel.app/workspace)
+
 
 ## Production Build
 
