@@ -36,9 +36,7 @@ npm run dev
 
 Open the application at:
 
-```text
-http://localhost:3000/workspace
-```
+[Open DocMind AI](https://docmind-chat-dusky.vercel.app/workspace)
 
 If port `3000` is already in use, use the `Local` URL shown in the terminal.
 
