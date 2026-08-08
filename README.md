@@ -1,80 +1,63 @@
-# DocMind AI
+## Getting Started
 
-An AI-powered document intelligence platform that allows users to upload PDF documents and interact with them through a conversational interface. The application uses semantic search and retrieval-augmented generation (RAG) to provide accurate, context-aware answers based on the uploaded documents.
-
-## Features
-
-- Upload one or more PDF documents
-- AI-powered document question answering
-- Semantic search using vector embeddings
-- Source citations for responses
-- Conversation history
-- Responsive modern user interface
-- PDF preview support
-- File validation and error handling
-
-## Tech Stack
-
-### Frontend
-- React
-- TypeScript
-- Vite
-- TanStack Router
-- Tailwind CSS
-- shadcn/ui
-
-### Backend
-- Supabase
-- AI-powered retrieval pipeline
-- Vector embeddings
-
-## Installation
-
-Clone the repository:
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/docmind-ai.git
+git clone https://github.com/mihika268/docmind-chat.git
+cd docmind-chat
 ```
 
-Install dependencies:
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-Start the development server:
+### 3. Configure Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+```
+
+> **Important:** Never commit `.env` or any API keys to GitHub.
+
+### 4. Run the Application
 
 ```bash
 npm run dev
 ```
 
-Open your browser and visit:
+Open the application at:
 
-```
-http://localhost:8080
-```
-
-## Project Structure
-
-```
-src/
-components/
-routes/
-hooks/
-lib/
-integrations/
-public/
+```text
+http://localhost:3000/workspace
 ```
 
-## Future Improvements
+If port `3000` is already in use, use the `Local` URL shown in the terminal.
 
-- Multi-document collections
-- Authentication
-- Export chat history
-- Advanced citation highlighting
-- OCR support for scanned PDFs
-- Streaming AI responses
+## Production Build
 
-## License
+Build the application:
 
-This project is intended for educational and portfolio purposes.
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npx vite preview
+```
+
+## Project Goal
+
+DocMind AI aims to simplify interaction with lengthy PDF documents.
+
+Instead of manually searching through pages, users can ask questions in natural language and receive relevant, document-grounded answers with source references.
