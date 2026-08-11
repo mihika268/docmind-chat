@@ -106,11 +106,30 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>DocMind AI — document intelligence portfolio project.</span>
-          <Link to="/workspace" className="text-primary hover:underline">
-            Launch the workspace →
-          </Link>
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <span>© 2026 DocMind AI. All rights reserved.</span>
+
+          <div className="flex flex-wrap gap-4">
+            <Link to="/privacy" className="hover:text-foreground hover:underline">
+              Privacy Policy
+            </Link>
+
+            <Link to="/terms" className="hover:text-foreground hover:underline">
+              Terms of Service
+            </Link>
+
+            <Link to="/ai-disclaimer" className="hover:text-foreground hover:underline">
+              AI Disclaimer
+            </Link>
+
+            <Link to="/copyright" className="hover:text-foreground hover:underline">
+              Copyright
+            </Link>
+
+            <Link to="/workspace" className="text-primary hover:underline">
+              Launch workspace →
+            </Link>
+          </div>
         </div>
       </footer>
     </main>
