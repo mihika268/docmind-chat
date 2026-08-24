@@ -167,5 +167,3 @@ The application follows security-conscious development practices, including:
 ## 👨‍💻 Author
 
 **Mihika Pal**
-
-B.Tech CSE Student · Full-Stack Developer · Security & AI Enthusiast
