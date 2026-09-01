@@ -227,7 +227,7 @@ export async function answer(params: {
         {
             query_embedding: JSON.stringify(queryVector),
             p_session_id: params.sessionId,
-            p_document_ids: null,
+            p_document_ids: null as unknown as string[],
             match_count: 6,
         },
     );
