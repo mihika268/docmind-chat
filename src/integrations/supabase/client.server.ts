@@ -5,91 +5,44 @@ import type { Database } from "./types";
 // This client bypasses Row Level Security (RLS) and must only be used
 // in trusted server-side code.
 
-function isNewSupabaseApiKey(value: string): boolean {
-  return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
-}
-
-function createSupabaseFetch(supabaseKey: string): typeof fetch {
-  return (input, init) => {
-    const headers = new Headers(
-      typeof Request !== "undefined" && input instanceof Request
-        ? input.headers
-        : undefined
-    );
-
-    if (init?.headers) {
-      new Headers(init.headers).forEach((value, key) =>
-        headers.set(key, value)
-      );
-    }
-
-    // New Supabase API keys are opaque strings, not bearer JWTs.
-    if (
-      isNewSupabaseApiKey(supabaseKey) &&
-      headers.get("Authorization") === `Bearer ${supabaseKey}`
-    ) {
-      headers.delete("Authorization");
-    }
-
-    headers.set("apikey", supabaseKey);
-
-    return fetch(input, {
-      ...init,
-      headers,
-    });
-  };
-}
-
 function createSupabaseAdminClient() {
-  const SUPABASE_URL = process.env["SUPABASE_URL"];
-  const SUPABASE_SERVICE_ROLE_KEY = process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  const supabaseUrl = process.env["SUPABASE_URL"]?.trim();
+  const serviceRoleKey = process.env["SUPABASE_SERVICE_ROLE_KEY"]?.trim();
 
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+  if (!supabaseUrl || !serviceRoleKey) {
     const missing = [
-      ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
-      ...(!SUPABASE_SERVICE_ROLE_KEY
-        ? ["SUPABASE_SERVICE_ROLE_KEY"]
-        : []),
-    ];
+      !supabaseUrl ? "SUPABASE_URL" : null,
+      !serviceRoleKey ? "SUPABASE_SERVICE_ROLE_KEY" : null,
+    ].filter(Boolean);
 
-    const message = `Missing Supabase environment variable(s): ${missing.join(
-      ", "
-    )}. Please configure your server environment variables.`;
-
-    console.error(`[Supabase] ${message}`);
-    throw new Error(message);
+    throw new Error(
+      `Missing Supabase environment variable(s): ${missing.join(", ")}.`,
+    );
   }
 
-  return createClient<Database>(
-    SUPABASE_URL,
-    SUPABASE_SERVICE_ROLE_KEY,
-    {
-      global: {
-        fetch: createSupabaseFetch(SUPABASE_SERVICE_ROLE_KEY),
-      },
-      auth: {
-        storage: undefined,
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-    }
-  );
+  // Use Supabase's default fetch implementation in the server runtime.
+  // Avoid a custom fetch wrapper because it can interfere with the
+  // runtime's Request/Headers handling and cause opaque "fetch failed" errors.
+  return createClient<Database>(supabaseUrl, serviceRoleKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
 }
 
 let _supabaseAdmin:
   | ReturnType<typeof createSupabaseAdminClient>
   | undefined;
 
-// Import inside server-side modules only:
-// const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
+// Import this module only from server-side code.
 export const supabaseAdmin = new Proxy(
   {} as ReturnType<typeof createSupabaseAdminClient>,
   {
     get(_, prop, receiver) {
       _supabaseAdmin ??= createSupabaseAdminClient();
-
       return Reflect.get(_supabaseAdmin, prop, receiver);
     },
-  }
+  },
 );
